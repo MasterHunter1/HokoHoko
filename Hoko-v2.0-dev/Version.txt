@@ -1,0 +1,3 @@
+Version.text
+v2.0 Stable base. New Nav, working Lisitngs, Quick Posts, Setup
+Saved 25 Feb 2026

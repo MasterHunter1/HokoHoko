@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HokoHoko – Trade what you have to get what you want!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">H</div>
+        <div>
+          <div>HokoHoko</div>
+          <div class="location">Lower Hutt · Within 10km</div>
+        </div>
+      </div>
+
+      <div class="profile-summary">
+        <div class="avatar" aria-hidden="true"></div>
+        <div class="profile-meta">
+          <div class="name">Hayden</div>
+          <div class="kudos">⭐ 120 Kudos</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button data-view="view-home">Home</button>
+        <button data-view="view-messages">Messages</button>
+        <button data-view="view-profile">Profile</button>
+        <button data-view="view-create">Create</button>
+        <button data-view="view-setup">Settings</button>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header>
+        <button
+          id="global-back-btn"
+          class="btn-secondary global-back-btn"
+          style="display:none; margin-right:12px"
+          onclick="goBack()"
+        >
+          ← Back
+        </button>
+      </header>
+
+      <section id="view-home" class="view active">
+        <div class="search-bar">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search swaps, skills, or suburbs…"
+          />
+          <button id="search-btn">Search</button>
+        </div>
+
+        <div class="section-title">Suggested swaps for you</div>
+        <div class="card-grid" id="home-suggested"></div>
+
+        <div class="section-title">New in your area</div>
+        <div class="card-grid" id="home-new"></div>
+
+        <div class="section-title">Skills available near you</div>
+        <div class="card-grid" id="home-skills"></div>
+      </section>
+
+      <!-- VIEW LISTING -->
+      <section id="view-listing" class="view">
+        <button
+          id="edit-listing-btn"
+          class="btn-secondary"
+          style="margin-top:12px;"
+          onclick="editListing()"
+        >
+          Edit listing
+        </button>
+
+        <h2 class="section-title" id="listing-title"></h2>
+
+        <!-- Make .card-img contain the listing image so renderListings and openListing match -->
+        <div class="card-img" style="margin-bottom:12px;">
+          <img id="listing-photo" class="listing-thumb" alt="Listing photo" style="display:none; width:100%; height:auto; object-fit:cover; border-radius:8px;">
+        </div>
+
+        <div style="font-size:14px; margin-bottom:8px;" id="listing-description"></div>
+
+        <div class="pill-row" style="margin-bottom:12px;">
+          <div class="pill" id="listing-type"></div>
+          <div class="pill" id="listing-suburb"></div>
+        </div>
+
+        <div class="section-title">Looking for</div>
+        <div style="font-size:14px; margin-bottom:16px;" id="listing-want"></div>
+
+        <button class="btn-primary" onclick="startChat()">Make an offer</button>
+
+        <button
+          id="delete-listing-btn"
+          class="btn-secondary"
+          style="margin-top:16px; display:none;"
+          onclick="openDeleteModal()"
+        >
+          Delete listing
+        </button>
+      </section>
+
+      <!-- CREATE VIEW -->
+      <section id="view-create" class="view">
+        <h2 class="section-title">Create a listing</h2>
+
+        <div class="form-group">
+          <label>Photos</label>
+
+          <button class="btn-secondary" onclick="openPhotoPicker()">
+            Upload photos
+          </button>
+
+          <input
+            type="file"
+            id="create-photo-input"
+            accept="image/*"
+            style="display:none"
+          >
+
+          <div style="font-size:11px; color:#666; margin-top:4px;">
+            Add at least 2 photos. Multiple angles help build trust.
+          </div>
+
+          <img
+            id="create-photo-preview"
+            alt="Photo preview"
+            style="
+              display:none;
+              max-width:200px;
+              max-height:200px;
+              object-fit:cover;
+              margin-top:10px;
+              border-radius:6px;
+            "
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select id="listing-category">
+            <option value="">Select a category</option>
+            <option>Tools & DIY</option>
+            <option>Home & Garden</option>
+            <option>Electronics</option>
+            <option>Kids & Baby</option>
+            <option>Sports & Outdoors</option>
+            <option>Clothing</option>
+            <option>Skills & Labour</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Approximate value</label>
+          <select id="listing-value">
+            <option value="">Select value range</option>
+            <option value="under-20">Under $20</option>
+            <option value="20-50">under $100</option>
+            <option value="50-100">Under $500</option>
+            <option value="100-plus">$1000+</option>
+          </select>
+
+          <div style="font-size:11px; color:#666; margin-top:4px;">
+            This helps others suggest fair swaps. No money changes hands.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Title</label>
+          <input
+            id="create-title"
+            type="text"
+            placeholder="e.g. 18V drill, 2 batteries" />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            id="create-description"
+            rows="4"
+            placeholder="Describe the item or skill, condition, and anything important.">
+          </textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex:1;">
+            <label>Trade type</label>
+            <select id="trade-type">
+              <option>Item</option>
+              <option>Skill / Labour</option>
+              <option>Request (I need…)</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Condition / Hours</label>
+            <input id="create-condition" type="text" placeholder="e.g. Good / 3 hours" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>What do you want in return?</label>
+          <input
+            id="create-want"
+            type="text"
+            placeholder="e.g. Lawn mowing, kids’ bike, open to offers" />
+        </div>
+
+        <button class="btn-primary" onclick="submitListing()">List on HokoHoko</button>
+      </section>
+
+      <!-- MESSAGES VIEW -->
+      <section id="view-messages" class="view">
+        <h2 class="section-title">Messages</h2>
+        <div style="font-size:13px; color:#666; margin-top:4px;">
+          This is where offers, questions, and trade details will show.
+        </div>
+        <div class="card" style="margin-top:12px;">
+          <div class="card-body">
+            <div class="card-title">Sam · 2km away</div>
+            <div style="font-size:13px;">“Keen to swap my ladder for your drill + 1 hour painting?”</div>
+            <div class="card-meta">Tap to open chat</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE VIEW -->
+      <section id="view-profile" class="view">
+        <div class="profile-header">
+          <div class="avatar">A</div>
+          <div>
+            <div style="font-weight:600;">Adept</div>
+            <div class="profile-meta">Lower Hutt · Trusted in your area</div>
+            <div class="pill-row">
+              <div class="pill">Verified phone</div>
+              <div class="pill">Community vouched</div>
+              <div class="pill">5 completed trades</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">Your listings</div>
+        <div class="card-grid" id="profile-listings"></div>
+
+        <div class="section-title">Skills you offer</div>
+        <div class="card-grid" id="profile-skills"></div>
+      </section>
+
+      <!-- PROFILE SETUP VIEW -->
+      <section id="view-setup" class="view">
+        <h2 class="section-title">Set up your HokoHoko profile</h2>
+
+        <div class="form-group">
+          <label>Mobile number</label>
+          <input type="text" id="setup-phone" placeholder="e.g. 021 123 4567" />
+          <button class="btn-primary" onclick="sendVerificationCode()">Send code</button>
+        </div>
+
+        <div class="form-group" id="verify-section" style="display:none;">
+          <label>Enter verification code</label>
+          <input type="text" id="setup-code" placeholder="6‑digit code" />
+          <button class="btn-primary" onclick="verifyCode()">Verify</button>
+        </div>
+
